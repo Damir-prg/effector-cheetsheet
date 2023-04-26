@@ -44,9 +44,13 @@ https://effector.dev/ "Сайт эффектора"
 
   Пример:
 
-  `const someEvent = createEvent<string>()`
-
-  `const $store = createStore<string[]>().on(someEvent, (state, result) =>` `                                      [...state, result])`
+  ```typescript
+  const someEvent = createEvent<string>();
+  const $store = createStore<string[]>().on(someEvent, (state, result) => [
+    ...state,
+    result,
+  ]);
+  ```
 
 * ### `map`
 
@@ -54,7 +58,9 @@ https://effector.dev/ "Сайт эффектора"
 
   Пример:
 
-  `const $secondStore = $store.map((item) => "new store item " + item)`
+  ```typescript
+  const $secondStore = $store.map((item) => "new store item " + item);
+  ```
 
 * ### `reset`
 
@@ -74,7 +80,9 @@ https://effector.dev/ "Сайт эффектора"
 
   Пример:
 
-  `$store.watch((state) => state)`
+  ```typescript
+  $store.watch((state) => state);
+  ```
 
 #
 
@@ -140,17 +148,15 @@ https://effector.dev/ "Сайт эффектора"
 
   Пример:
 
-  > `const sayHi = createEvent()`
-  >
-  > `const stop = sayHi.watch(name => {`
-  >
-  > `console.log(Привет, ${name}!)`
-  >
-  > `})`
-  >
-  > `sayHi('Боб')`
-  >
-  > `// => Привет, Боб!`
+  ```typescript
+   const sayHi = createEvent()
+
+   const stop = sayHi.watch(name => {console.log(Привет, ${name}!)})
+
+   sayHi('Боб')
+
+   // => Привет, Боб!
+  ```
 
 #
 
@@ -184,8 +190,10 @@ https://effector.dev/ "Сайт эффектора"
 
   Пример:
 
-  > `sample({clock: trigger, source: $store, fn?: () => {} ,target: effectFx})`
-  >
+  ```typescript
+  sample({ clock: trigger, source: $store, fn: () => {}, target: effectFx });
+  ```
+
   > При срабатывание триггера clock, данные из source идут в функцию fn, при её наличии, и отправляются в target на финальную обработку/действие.
 
 - ### `forward`
@@ -198,13 +206,12 @@ https://effector.dev/ "Сайт эффектора"
 
   Пример:
 
-  > `forward({`
-  >
-  > `from: state`
-  >
-  > `to: someEffectFx`
-  >
-  > `});`
+  ```typescript
+   forward({
+    from: state
+    to: someEffectFx
+    });
+  ```
 
 #
 
@@ -233,33 +240,31 @@ https://effector.dev/ "Сайт эффектора"
 
 Пример:
 
-> `const fetchUserByIdFx = createEffect((id: number) => axios.get("/id").data)`
->
-> `const $user = createStore<TUser | null>(null).on(` ` fetchUserByIdFx.doneData,` `(state, result) => result` `)`
->
-> `const UserGate = createGate<{id: number}>()`
->
-> `forward({from: UserGate.state, to: fetchUserByIdFx})`
+```typescript
+const fetchUserByIdFx = createEffect((id: number) => axios.get("/id").data)
 
-> `const [state, dispatch] = useReducer((state) => state + 1, 0);`
->
-> `return (`
->
-> `<main className="home">`
->
-> ` <div className="home__hello">`
->
-> `<h1>Hello, dear character!</h1>`
->
-> `<button onClick={() => dispatch()}>increament</button>`
->
-> ` <PostGate id={state} />`
->
-> ` <Post />`
->
-> ` </div>`
->
-> `</main>`
+const $user = createStore<TUser | null>(null).on(` ` fetchUserByIdFx.doneData,` `(state, result) => result)
+
+const UserGate = createGate<{id: number}>()
+
+forward({
+    from: UserGate.state,
+    to: fetchUserByIdFx
+    })
+
+const [state, dispatch] = useReducer((state) => state + 1, 0);
+
+return (
+  <main className="home">
+    <div className="home__hello">
+      <h1>Hello, dear character!</h1>
+        <button onClick={() => dispatch()}>increament</button>
+        <PostGate id={state} />
+        <Post />
+    </div>
+  </main>
+  );
+```
 
 #
 
